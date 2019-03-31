@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "session_start",
+    "type": "sessionEvent",
+    "version": "1.2",
+    "deviceType": "Galaxy 10",
+    "deviceFamily": "Samsung Galaxy",
+    "os": "Android",
+    "country": "USA",
+    "city": "NYC",
+    "carrier": "Verizon"
+  },
+  {
+    "id": 2,
+    "name": "session_start",
+    "type": "sessionEvent",
+    "version": "1.2",
+    "deviceType": "Galaxy 10",
+    "deviceFamily": "Samsung Galaxy",
+    "os": "Android",
+    "country": "USA",
+    "city": "NYC",
+    "carrier": "Verizon"
+  },
+  {
+    "id": 3,
+    "name": "session_start",
+    "type": "sessionEvent",
+    "version": "1.2",
+    "deviceType": "Galaxy 10",
+    "deviceFamily": "Samsung Galaxy",
+    "os": "Android",
+    "country": "USA",
+    "city": "NYC",
+    "carrier": "Verizon"
+  },
+  {
+    "id": 4,
+    "name": "session_start",
+    "type": "sessionEvent",
+    "version": "1.2",
+    "deviceType": "Galaxy 10",
+    "deviceFamily": "Samsung Galaxy",
+    "os": "Android",
+    "country": "USA",
+    "city": "NYC",
+    "carrier": "Verizon"
+  }
+]
