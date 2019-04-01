@@ -9,14 +9,16 @@ import java.io.InputStream;
 import java.util.Objects;
 import java.util.Properties;
 
+/**
+ * Class responsible to load and manage application wide properties
+ */
 public class Property {
 
-    public static Properties prop;
+    private static Properties prop;
     private static String propertyFileName = "application.properties";
-
-    public static final String EVENT_TRACKER_API_URL = "event.tracker.api.url";
-    public static final String RETRY_NUMBER = "retry.attempt.number";
-    public static final String RETRY_INTERVAL = "retry.time.interval";
+    private static final String EVENT_TRACKER_API_URL = "event.tracker.api.url";
+    private static final String RETRY_NUMBER = "retry.attempt.number";
+    private static final String RETRY_INTERVAL = "retry.time.interval";
 
     private static Logger LOGGER = LoggerFactory.getLogger(Property.class);
 

@@ -6,26 +6,21 @@ import com.iac.sdk.client.RestClient;
 import com.iac.sdk.consumer.EventConsumer;
 import com.iac.sdk.domain.Event;
 import com.iac.sdk.producer.EventProducer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class IacSdkApplication
 {
-    private static Properties appProps;
+    private static Logger LOGGER = LoggerFactory.getLogger(IacSdkApplication.class);
 
     public static void main( String[] args )
     {
-        //load application properties
-        loadApplicationProperty();
-
         BlockingQueue<Event> queue = new LinkedBlockingQueue<>();
         List<Event> eventData = loadEventData();
 
@@ -38,35 +33,18 @@ public class IacSdkApplication
      * @return list of events
      */
     private static List<Event> loadEventData() {
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        File jsonFile = new File(classLoader.getResource("eventData.json").getFile());
-
         ObjectMapper objectMapper = new ObjectMapper();
         List<Event> eventData = new ArrayList<>();
-
         try {
-            eventData = objectMapper.readValue(jsonFile, new TypeReference<List<Event>>(){});
-        }
-        catch (IOException e) {
+            InputStream in = new FileInputStream("src/main/resources/eventData.json");
+            if(in != null){
+                eventData = objectMapper.readValue(in, new TypeReference<List<Event>>(){});
+            }
+        } catch (IOException e) {
+            LOGGER.error("Application event mock data load failed");
             e.printStackTrace();
         }
 
         return eventData;
-    }
-
-    /**
-     * loads application properties
-     */
-    private static void loadApplicationProperty() {
-
-        try {
-            appProps = new Properties();
-            InputStream in = ClassLoader.getSystemResourceAsStream("application.properties");
-            appProps.load(in);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

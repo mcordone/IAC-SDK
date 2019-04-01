@@ -2,7 +2,6 @@ package com.iac.sdk.consumer;
 
 import com.iac.sdk.client.RestClient;
 import com.iac.sdk.client.RetryOnRestClientException;
-import com.iac.sdk.config.Property;
 import com.iac.sdk.domain.Event;
 import com.iac.sdk.exception.RestClientException;
 import com.iac.sdk.exception.RetryLimitException;
@@ -11,6 +10,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
 public class EventConsumer implements Runnable {
@@ -26,13 +26,13 @@ public class EventConsumer implements Runnable {
 
     public void run() {
 
+        Event event = null;
         try{
             while (true) {
-                Event event = queue.take();
+                event = queue.take();
                 postWithRetry(event);
             }
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
     }
@@ -45,22 +45,29 @@ public class EventConsumer implements Runnable {
     private int postWithRetry(Event event) {
 
         CloseableHttpResponse response = null;
-        int statusCode;
+        int statusCode = 0;
 
-        RetryOnRestClientException retryHandler = new RetryOnRestClientException(Property.getRetryNumber(), Property.getRetryInteral());
+        RetryOnRestClientException retryHandler = new RetryOnRestClientException();
 
         while (true) {
             try {
                 response = restClient.executePostWithEntity(event);
                 statusCode = response.getStatusLine().getStatusCode();
+                response.close();
+                LOGGER.info("Response statusCode: {}", statusCode);
 
             } catch (RestClientException e) {
-                LOGGER.info("RestClientException " + e.getMessage() + " --- Retrying.....");
-                retryHandler.onError();
-                continue;
-            } /*catch (RetryLimitException e) {
-                LOGGER.info(e.getMessage());
-            }*/
+                LOGGER.info("RestClientException message: {} event name: {}", e.getMessage(), event.getName());
+                try{
+                    retryHandler.onException();
+                    continue;
+                } catch (RetryLimitException ex) {
+                    LOGGER.error("RetryLimitException message {}", ex.getMessage());
+                    return 0;
+                }
+            } catch (IOException e) {
+                LOGGER.error("IOException message {}", e.getMessage());
+            }
 
             if (statusCode == HttpStatus.SC_OK) {
                 break;
