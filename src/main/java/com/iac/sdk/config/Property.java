@@ -49,5 +49,5 @@ public class Property {
         return Integer.parseInt(prop.getProperty(RETRY_NUMBER));
     }
 
-    public static long getRetryInteral() { return Long.parseLong(prop.getProperty(RETRY_INTERVAL)); }
+    public static long getRetryInterval() { return Long.parseLong(prop.getProperty(RETRY_INTERVAL)); }
 }

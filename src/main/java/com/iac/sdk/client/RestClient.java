@@ -21,7 +21,7 @@ public class RestClient {
 
     public RestClient() {
         apiUrl = Property.getApiUrl();
-        httpClient = HttpClients.createDefault(); //HttpClientBuilder.create().build();
+        httpClient = HttpClients.createDefault();
         httpPost = createHttpPostWithHeaders();
         objectMapper = new ObjectMapper();
     }
@@ -44,7 +44,7 @@ public class RestClient {
      * @return CloseableHttpResponse
      */
     public CloseableHttpResponse executePostWithEntity(Event event) {
-        CloseableHttpResponse response = null;
+        CloseableHttpResponse response;
 
         try {
             String eventJson = objectMapper.writeValueAsString(event);
@@ -58,5 +58,4 @@ public class RestClient {
 
         return response;
     }
-
 }

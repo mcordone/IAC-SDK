@@ -12,7 +12,12 @@ public class RetryOnRestClientException {
 
     public RetryOnRestClientException() {
         retryNumber = (Property.getRetryNumber() <= 0) ? RETRY_NUMBER_DEFAULT : Property.getRetryNumber();
-        retryTimeInterval = (Property.getRetryInteral() <= 0) ? RETRY_TIME_INTERVAL_DEFAULT : Property.getRetryInteral();
+        retryTimeInterval = (Property.getRetryInterval() <= 0) ? RETRY_TIME_INTERVAL_DEFAULT : Property.getRetryInterval();
+    }
+
+    public RetryOnRestClientException(int retryNumber, long retryTimeInterval) {
+        this.retryNumber = retryNumber;
+        this.retryTimeInterval = retryTimeInterval;
     }
 
     /**

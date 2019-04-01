@@ -39,7 +39,6 @@ public class EventProducer implements Runnable {
     private void generateEvents() throws InterruptedException {
         for (int i = 0; i < eventData.size(); i++) {
             queue.put(eventData.get(i));
-            //LOGGER.info("Event Name {}", eventData.get(i).getName());
         }
 
         Thread.sleep(SLEEP_TIME_INTERVAL);

@@ -9,7 +9,9 @@ import com.iac.sdk.producer.EventProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -21,16 +23,19 @@ public class IacSdkApplication
 
     public static void main( String[] args )
     {
-        BlockingQueue<Event> queue = new LinkedBlockingQueue<>();
+        //load and create events
         List<Event> eventData = loadEventData();
 
+        BlockingQueue<Event> queue = new LinkedBlockingQueue<>();
+
         new Thread(new EventProducer(queue, eventData)).start();
+        new Thread(new EventConsumer(queue, new RestClient())).start();
         new Thread(new EventConsumer(queue, new RestClient())).start();
     }
 
     /**
-     *
-     * @return list of events
+     * Util method to load mock event data.
+     * @return List of events
      */
     private static List<Event> loadEventData() {
         ObjectMapper objectMapper = new ObjectMapper();
